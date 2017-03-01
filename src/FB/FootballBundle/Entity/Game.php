@@ -38,7 +38,7 @@ class Game
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DateMatch", type="date")
+     * @ORM\Column(name="DateMatch", type="datetime")
      */
     private $dateMatch;
 

@@ -4,6 +4,7 @@ namespace FB\FootballBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FB\BetBundle\Entity\Odd;
+use FB\FootballBundle\Entity\Game;
 
 /**
  * UpdateGame
@@ -146,7 +147,9 @@ class UpdateGame
 
                     }
                 }
-                if ($em->getRepository('BetBundle:Game')->verificationGame($CurrentGame) == null){
+                //var_dump($CurrentGame);
+                //var_dump($em->getRepository('FootballBundle:Game')->verificationGame($CurrentGame));die();
+                if ($em->getRepository('FootballBundle:Game')->verificationGame($CurrentGame) == null){
 
                     $em->persist($CurrentGame);
                     $em->persist($AwayTeamOdd);
