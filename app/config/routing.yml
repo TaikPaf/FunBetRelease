@@ -1,0 +1,30 @@
+stats:
+    resource: "@StatsBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+football:
+    resource: "@FootballBundle/Controller/"
+    type:     annotation
+    prefix:   /football
+
+admin:
+    resource: "@AdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+support:
+    resource: "@SupportBundle/Controller/"
+    type:     annotation
+    prefix:   /support
+
+bet:
+    resource: "@BetBundle/Controller/"
+    type:     annotation
+    prefix:   /bet
+
+member:
+    resource: "@MemberBundle/Controller/"
+    type:     annotation
+    prefix:   /member
+
