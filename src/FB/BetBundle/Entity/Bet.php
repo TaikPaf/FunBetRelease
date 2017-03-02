@@ -3,6 +3,7 @@
 namespace FB\BetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FB\MemberBundle\Entity\User;
 
 /**
  * Bet
@@ -22,16 +23,14 @@ class Bet
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="user", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="FB\MemberBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="odd", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="FB\BetBundle\Entity\Odd")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $odd;
 
@@ -77,10 +76,10 @@ class Bet
     /**
      * Set user
      *
-     * @param string $user
-     * @return Bet
+     *
+     *
      */
-    public function setUser($user)
+    public function setUser(User $user)
     {
         $this->user = $user;
 

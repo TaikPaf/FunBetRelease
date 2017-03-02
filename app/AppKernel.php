@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new FB\AdminBundle\AdminBundle(),
             new FB\FootballBundle\FootballBundle(),
             new FB\StatsBundle\StatsBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
