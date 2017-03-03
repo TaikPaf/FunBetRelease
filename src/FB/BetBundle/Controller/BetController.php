@@ -25,7 +25,7 @@ class BetController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $bets = $em->getRepository('BetBundle:Bet')->findAll();
+        $bets = $em->getRepository('BetBundle:Bet')->findUserBet($this->getUser());
 
         return $this->render('bet/index.html.twig', array(
             'bets' => $bets,
@@ -51,6 +51,7 @@ class BetController extends Controller
             if ($daystat == null){
                 $daystat = new DayStat();
                 $daystat->setDate(new \DateTime());
+                $daystat->setNbUser(0);
             }
 
             $user = $em->getRepository('MemberBundle:User')->find($this->getUser());
@@ -64,7 +65,7 @@ class BetController extends Controller
             //Ajout des stats en BDD
             $daystat->setNbBet($daystat->getNbBet() + 1);
             $daystat->setNbAmountBet($daystat->getNbAmountBet() + 1);
-            $daystat->setNbUser($daystat->getNbUser() + 1);
+            
 
             $user->setCredit($user->getCredit() - $bet->getAmount());
 

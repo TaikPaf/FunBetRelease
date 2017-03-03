@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bets list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Amount</th>
+                <th>Potentialwin</th>
+                <th>Iswin</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bet in bets %}
+            <tr>
+                <td><a href="{{ path('bet_show', { 'id': bet.id }) }}">{{ bet.id }}</a></td>
+                <td>{{ bet.amount }}</td>
+                <td>{{ bet.potentialWin }}</td>
+                <td>{% if bet.isWin %}Yes{% else %}No{% endif %}</td>
+                <td>{% if bet.date %}{{ bet.date|date('Y-m-d') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('bet_show', { 'id': bet.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('bet_edit', { 'id': bet.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

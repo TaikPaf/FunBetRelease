@@ -3,6 +3,7 @@
 namespace FB\BetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use FB\FootballBundle\Entity\Game;
 
 /**
  * OddRepository
@@ -12,4 +13,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class OddRepository extends EntityRepository
 {
+    public function findByGame(Game $game){
+        $qb = $this->createQueryBuilder('o');
+        $qb->where('o.game = :game')
+            ->setMaxResults(30)
+            ->orderBy('o.game.id', 'ASC')
+            ->setParameter('game', $game);
+
+        return $qb->getQuery()->getResult();
+    }
 }

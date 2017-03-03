@@ -3,6 +3,7 @@
 namespace FB\BetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use FB\MemberBundle\Entity\User;
 
 /**
  * BetRepository
@@ -12,4 +13,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class BetRepository extends EntityRepository
 {
+    public function findUserBet(User $user){
+        $qb = $this->createQueryBuilder('b');
+        $qb->where('b.user = :user')
+            ->orderBy('b.id', 'DESC')
+            ->setParameter('user', $user);
+
+        return $qb->getQuery()->getResult();
+    }
 }
