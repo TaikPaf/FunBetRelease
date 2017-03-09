@@ -1,11 +1,9 @@
-bet_bet:
-    resource: "@BetBundle/Controller/BetController.php"
-    type:     annotation
+
 
 stats:
     resource: "@StatsBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /stats
 
 football:
     resource: "@FootballBundle/Controller/"

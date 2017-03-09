@@ -7,7 +7,8 @@ use FB\BetBundle\Entity\Odd;
 use FB\StatsBundle\Entity\DayStat;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Bet controller.
@@ -67,6 +68,7 @@ class BetController extends Controller
             $daystat->setNbAmountBet($daystat->getNbAmountBet() + 1);
             
 
+            //Mise à jour du crédit joueur
             $user->setCredit($user->getCredit() - $bet->getAmount());
 
             $em->persist($bet);
@@ -82,46 +84,9 @@ class BetController extends Controller
         ));
     }
 
-    /**
-     * Finds and displays a bet entity.
-     *
-     * @Route("/{id}", name="bet_show")
-     * @Method("GET")
-     */
-    public function showAction(Bet $bet)
-    {
-        $deleteForm = $this->createDeleteForm($bet);
+    
 
-        return $this->render('bet/show.html.twig', array(
-            'bet' => $bet,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
 
-    /**
-     * Displays a form to edit an existing bet entity.
-     *
-     * @Route("/{id}/edit", name="bet_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, Bet $bet)
-    {
-        $deleteForm = $this->createDeleteForm($bet);
-        $editForm = $this->createForm('FB\BetBundle\Form\BetType', $bet);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('bet_edit', array('id' => $bet->getId()));
-        }
-
-        return $this->render('bet/edit.html.twig', array(
-            'bet' => $bet,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
 
     /**
      * Deletes a bet entity.
