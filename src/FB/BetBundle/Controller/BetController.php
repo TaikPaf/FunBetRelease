@@ -39,7 +39,7 @@ class BetController extends Controller
      * @Route("/new/{id}", name="bet_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request, Odd $odd)
+    public function newBetAction(Request $request, Odd $odd)
     {
         $bet = new Bet();
         $form = $this->createForm('FB\BetBundle\Form\BetType', $bet);
@@ -47,7 +47,9 @@ class BetController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
+           
+            $bet->setAmount(abs($bet->getAmount()));
+            
             $daystat = $em->getRepository('StatsBundle:DayStat')->FindOneBy(array('date' => new \DateTime()));
             if ($daystat == null){
                 $daystat = new DayStat();
@@ -83,10 +85,7 @@ class BetController extends Controller
             'form' => $form->createView(),
         ));
     }
-
     
-
-
 
     /**
      * Deletes a bet entity.

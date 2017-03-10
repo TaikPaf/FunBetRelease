@@ -15,5 +15,31 @@
                 </div>
              </div>
          </div>
+        <div class="span6">
+        <div class="widget-box">
+            <div class="widget-title bg_lg"><span class="icon"><i class="icon-signal"></i></span>
+                <h5>Derniers bets</h5>
+            </div>
+            <div class="widget-content">
+                <div class="row-fluid">
+                <table class="table table-bordered table-striped">
+                    {% for bet in bets %}
+                        <tr>
+                            <td>{{ bet.id }}</td>
+                            <td>{{ bet.user.username }}</td>
+                            <td>{{ bet.amount }}</td>
+                            <td>{{ bet.odd.game.homeTeam }}</td>
+                            <td>{{ bet.odd.game.awayTeam }}</td>
+                            <td>
+                                <a href="{{ path('admin_bet_cancel', {'id':bet.id}) }}" class="btn btn-danger btn-mini">Annuler</a>
+                                <a href="{{ path('admin_bet_edit', {'id':bet.id}) }}" class="btn btn-warning btn-mini">Editer</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                </table>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
 {% endblock %}

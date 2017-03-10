@@ -11,14 +11,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-class AdminController extends Controller
+class AdminBetController extends Controller
 {
 
     /**
      * @Route("/", name="admin_index")
      */
     public function indexAction(){
-        return $this->render('admin/index.html.twig');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $bets = $em->getRepository('BetBundle:Bet')->findBy(array(),array('id' => 'DESC'),20);
+
+        return $this->render('admin/index.html.twig',array(
+            'bets' => $bets
+        ));
     }
 
 
@@ -62,7 +69,7 @@ class AdminController extends Controller
      * @Route("/bet/{id}/edit", name="admin_bet_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Bet $bet)
+    public function editBetAction(Request $request, Bet $bet)
     {
         $editForm = $this->createForm('FB\BetBundle\Form\BetType', $bet);
         $editForm->handleRequest($request);
@@ -77,5 +84,28 @@ class AdminController extends Controller
             'bet' => $bet,
             'edit_form' => $editForm->createView(),
         ));
+    }
+
+    /**
+     * cancel a bet.
+     *
+     * @Route("/bet/cancel/{id}", name="admin_bet_cancel")
+     * @Method({"GET", "POST"})
+     */
+    public function cancelBetAction(Bet $bet){
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('MemberBundle:User')->find($bet->getUser());
+
+        $user->setCredit($user->getCredit() + $bet->getAmount());
+
+        if ($user->getNbBet() > 0){
+            $user->setNbBet($user->getNbBet() - 1);
+        }
+        
+        $em->remove($bet);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_index');
     }
 }
