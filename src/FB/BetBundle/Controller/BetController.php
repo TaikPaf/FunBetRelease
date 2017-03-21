@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class BetController extends Controller
 {
+    
+    
     /**
      * Lists all bet entities.
      *
@@ -45,7 +47,7 @@ class BetController extends Controller
         $form = $this->createForm('FB\BetBundle\Form\BetType', $bet);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $this->getUser()->getCredit() >= $bet->getAmount()) {
             $em = $this->getDoctrine()->getManager();
            
             $bet->setAmount(abs($bet->getAmount()));
@@ -85,41 +87,21 @@ class BetController extends Controller
             'form' => $form->createView(),
         ));
     }
+
+    /**
+     * Validation matchs - En cours
+     *
+     * @Route("/validation", name="bet_validation")
+     * @Method({"GET", "POST"})
+     */
+    public function validationBetAction(){
+        $em = $this->getDoctrine()->getManager();
+
+        $matchs = $em->getRepository('FootballBundle:Game')->findGameInProgress();
+        $data = file_get_contents('http://api.football-data.org/v1/competitions/434/fixtures');
+
+
+        print_r($data);die();
+    }
     
-
-    /**
-     * Deletes a bet entity.
-     *
-     * @Route("/{id}", name="bet_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Bet $bet)
-    {
-        $form = $this->createDeleteForm($bet);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($bet);
-            $em->flush($bet);
-        }
-
-        return $this->redirectToRoute('bet_index');
-    }
-
-    /**
-     * Creates a form to delete a bet entity.
-     *
-     * @param Bet $bet The bet entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Bet $bet)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('bet_delete', array('id' => $bet->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }

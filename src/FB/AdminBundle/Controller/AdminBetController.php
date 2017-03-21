@@ -62,6 +62,22 @@ class AdminBetController extends Controller
         ));
     }
 
+    /**
+     * Finds and displays a bet entity.
+     *
+     * @Route("/bet/", name="admin_bet_show_all")
+     * @Method("GET")
+     */
+    public function showAllBetAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $bets = $em->getRepository('BetBundle:Bet')->findBy(array(),array('id' => 'DESC'),20);
+        
+        return $this->render('admin/showBet.html.twig', array(
+            'bets' => $bets,
+        ));
+    }
+
 
     /**
      * Displays a form to edit an existing bet entity.
@@ -76,8 +92,9 @@ class AdminBetController extends Controller
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            $this->get('session')->getFlashBag()->set('success', 'Bet bien modifié');
 
-            return $this->redirectToRoute('bet_edit', array('id' => $bet->getId()));
+            return $this->redirectToRoute('admin_index');
         }
 
         return $this->render('bet/edit.html.twig', array(

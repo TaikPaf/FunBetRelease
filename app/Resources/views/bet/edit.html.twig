@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseAdmin.html.twig' %}
 
 {% block body %}
     <h1>Bet edit</h1>
@@ -8,10 +8,4 @@
         <input type="submit" value="Edit" />
     {{ form_end(edit_form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('bet_index') }}">Back to the list</a>
-        </li>
-
-    </ul>
 {% endblock %}

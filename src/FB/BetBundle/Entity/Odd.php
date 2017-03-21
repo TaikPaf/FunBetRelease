@@ -36,7 +36,7 @@ class Odd
     private $odd;
 
     /**
-     * @ORM\ManyToOne(targetEntity="FB\FootballBundle\Entity\Game")
+     * @ORM\ManyToOne(targetEntity="FB\FootballBundle\Entity\Game", inversedBy="odds")
      * @ORM\JoinColumn(nullable=false)
      */
     private $game;

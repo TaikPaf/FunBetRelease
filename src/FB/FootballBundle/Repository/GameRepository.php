@@ -25,7 +25,7 @@ class GameRepository extends EntityRepository
 
     public function findGameInProgress(){
         $qb = $this->createQueryBuilder('g');
-        $qb->where('g.inProgress = true')
+        $qb->where('g.inprogress = true')
             ->orderBy('g.dateMatch', 'ASC');
 
         return $qb->getQuery()->getResult();

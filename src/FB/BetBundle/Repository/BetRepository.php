@@ -21,4 +21,6 @@ class BetRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    
 }

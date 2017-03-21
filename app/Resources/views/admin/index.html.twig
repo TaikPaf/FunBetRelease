@@ -1,45 +1,80 @@
 {% extends 'baseAdmin.html.twig' %}
 
 {% block body %}
-    <div class="row-fluid">
-        <div class="span6">
-            <div class="widget-box ">
-                <div class="widget-title bg_lo"  data-toggle="collapse" href="#collapseG3" > <span class="icon"> <i class="icon-chevron-down"></i> </span>
-                    <h5>Derniers reports</h5>
-                </div>
-                <div class="widget-content nopadding updates collapse in" id="collapseG3">
-                    <div class="new-update clearfix"> <i class="icon-warning-sign"></i> <span class="update-notice"> <a title="" href="#"><strong>Congratulation Maruti, Happy Birthday </strong></a> <span>many many happy returns of the day</span> </span> <span class="update-date"><span class="update-day">11</span>jan</span> </div>
-                    <div class="new-update clearfix"> <i class="icon-warning-sign"></i> <span class="update-alert"> <a title="" href="#"><strong>Maruti is a Responsive Admin theme</strong></a> <span>But already everything was solved. It will ...</span> </span> <span class="update-date"><span class="update-day">07</span>Jan</span> </div>
-                    <div class="new-update clearfix"> <i class="icon-warning-sign"></i> <span class="update-done"> <a title="" href="#"><strong>Envato approved Maruti Admin template</strong></a> <span>i am very happy to approved by TF</span> </span> <span class="update-date"><span class="update-day">05</span>jan</span> </div>
-                    <div class="new-update clearfix"> <i class="icon-warning-sign"></i> <span class="update-notice"> <a title="" href="#"><strong>I am alwayse here if you have any question</strong></a> <span>we glad that you choose our template</span> </span> <span class="update-date"><span class="update-day">01</span>jan</span> </div>
-                </div>
-             </div>
-         </div>
-        <div class="span6">
-        <div class="widget-box">
-            <div class="widget-title bg_lg"><span class="icon"><i class="icon-signal"></i></span>
-                <h5>Derniers bets</h5>
+    <div class="row">
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success alert-dismissible col-md-4 col-md-offset-4" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Enregistré !</strong> Votre bet a été modifié.
             </div>
-            <div class="widget-content">
-                <div class="row-fluid">
-                <table class="table table-bordered table-striped">
-                    {% for bet in bets %}
+
+        {% endfor %}
+    </div>
+
+
+    <div class="row gutter-xs">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+
+                    <strong>Derniers reporting</strong>
+                </div>
+                <div class="card-body" data-toggle="match-height" style="height: 262px;">
+                    <table class="table">
+                        <thead>
                         <tr>
-                            <td>{{ bet.id }}</td>
-                            <td>{{ bet.user.username }}</td>
-                            <td>{{ bet.amount }}</td>
-                            <td>{{ bet.odd.game.homeTeam }}</td>
-                            <td>{{ bet.odd.game.awayTeam }}</td>
-                            <td>
-                                <a href="{{ path('admin_bet_cancel', {'id':bet.id}) }}" class="btn btn-danger btn-mini">Annuler</a>
-                                <a href="{{ path('admin_bet_edit', {'id':bet.id}) }}" class="btn btn-warning btn-mini">Editer</a>
-                            </td>
+                            <th>#</th>
+                            <th>Campaign Name</th>
+                            <th>Link Clicks</th>
+                            <th>Reach</th>
+                            <th>Status</th>
                         </tr>
-                        {% endfor %}
-                </table>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon icon-calculator"></span>
+                    <strong>Derniers bets</strong>
+                </div>
+                <div class="card-body" data-toggle="match-height" style="height: 262px;">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Numero</th>
+                            <th class="text-center">Username</th>
+                            <th class="text-center">Montant</th>
+                            <th class="text-center">Home</th>
+                            <th class="text-center">Away</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        {% for bet in bets %}
+                            <tr>
+                                <td>{{ bet.id }}</td>
+                                <td>{{ bet.user.username }}</td>
+                                <td>{{ bet.amount }} €</td>
+                                <td>{{ bet.odd.game.homeTeam }}</td>
+                                <td>{{ bet.odd.game.awayTeam }}</td>
+                                <td>
+                                    <a href="{{ path('admin_bet_cancel', {'id':bet.id}) }}" class="btn btn-danger btn-mini">Annuler</a>
+                                    <a href="{{ path('admin_bet_edit', {'id':bet.id}) }}" class="btn btn-warning btn-mini">Editer</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
+
 {% endblock %}

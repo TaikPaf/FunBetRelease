@@ -2,7 +2,9 @@
 
 namespace FB\FootballBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use FB\BetBundle\Entity\Odd;
 
 /**
  * Game
@@ -83,6 +85,25 @@ class Game
      * @ORM\Column(name="typeGame", type="string")
      */
     private $typeGame;
+
+    /**
+     * @ORM\OneToMany(targetEntity="FB\BetBundle\Entity\Odd", mappedBy="game")
+     */
+    private $odds;
+
+
+    public function addOdds(Odd $odd){
+        $this->odds[] = $odd;
+        return $this;
+    }
+
+    public function removeOdds(Odd $odd){
+        $this->odds->removeElement($odd);
+    }
+
+    public function getOdds(){
+        return $this->odds;
+    }
 
 
     public function getTypeGame(){
@@ -296,5 +317,6 @@ class Game
         $this->setHomeGoal(0);
         $this->setHomeTeam('');
         $this->setResult(0);
+        $this->odds = new ArrayCollection();
     }
 }

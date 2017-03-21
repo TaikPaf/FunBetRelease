@@ -1,17 +1,17 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseAdmin.html.twig' %}
 
 {% block body %}
     <h1>Bets list</h1>
 
-    <table>
+    <table class="table table-hover table-bordered">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Amount</th>
                 <th>Potentialwin</th>
                 <th>Iswin</th>
                 <th>Date</th>
-                <th>Actions</th>
+                <th colspan="2">Actions</th>
+
             </tr>
         </thead>
         <tbody>
@@ -21,13 +21,8 @@
                 <td>{{ bet.potentialWin }}</td>
                 <td>{% if bet.isWin %}Yes{% else %}No{% endif %}</td>
                 <td>{% if bet.date %}{{ bet.date|date('Y-m-d') }}{% endif %}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('bet_edit', { 'id': bet.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
+                <td>{{ bet.odd.game.homeTeam }} -
+                {{ bet.odd.game.awayTeam }}</td>
             </tr>
         {% endfor %}
         </tbody>

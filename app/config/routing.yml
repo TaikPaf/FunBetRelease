@@ -1,4 +1,12 @@
+site:
+    resource: "@SiteBundle/Controller/"
+    type:     annotation
+    prefix:   /
 
+accueil:
+    resource: "@SiteBundle/Controller"
+    type:     annotation
+    prefix:   /
 
 stats:
     resource: "@StatsBundle/Controller/"

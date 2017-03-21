@@ -132,16 +132,19 @@ class UpdateGame
                                 $HomeTeamOdd->setOdd((float)$choice['odd'][0]);
                                 $HomeTeamOdd->setGame($CurrentGame);
                                 $HomeTeamOdd->setName('homeTeam');
+                                $CurrentGame->addOdds($HomeTeamOdd);
                             }
                             if ($choice['name'] == 'Nul') {
                                 $DrawOdd->setOdd((float)$choice['odd'][0]);
                                 $DrawOdd->setGame($CurrentGame);
                                 $DrawOdd->setName('Draw');
+                                $CurrentGame->addOdds($DrawOdd);
                             }
                             if ($choice['name'] == '%2%') {
                                 $AwayTeamOdd->setOdd((float)$choice['odd'][0]);
                                 $AwayTeamOdd->setGame($CurrentGame);
                                 $AwayTeamOdd->setName('awayTeam');
+                                $CurrentGame->addOdds($AwayTeamOdd);
                             }
                         }
 
