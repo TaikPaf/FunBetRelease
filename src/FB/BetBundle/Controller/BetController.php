@@ -4,6 +4,7 @@ namespace FB\BetBundle\Controller;
 
 use FB\BetBundle\Entity\Bet;
 use FB\BetBundle\Entity\Odd;
+use FB\MemberBundle\Entity\User;
 use FB\StatsBundle\Entity\DayStat;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -98,10 +99,94 @@ class BetController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $matchs = $em->getRepository('FootballBundle:Game')->findGameInProgress();
-        $data = file_get_contents('http://api.football-data.org/v1/competitions/434/fixtures');
+        $data = json_decode(file_get_contents('http://api.football-data.org/v1/competitions/434/fixtures'),true);
+        foreach ($data['fixtures'] as $datamatch){
+            if  ($datamatch['status'] == "FINISHED" && $datamatch['date'] <= new \DateTime()){
 
 
-        print_r($data);die();
+                $hometeam = $em->getRepository('BetBundle:LinkName')->findNameTeam($datamatch['homeTeamName']);
+                $awayteam = $em->getRepository('BetBundle:LinkName')->findNameTeam($datamatch['awayTeamName']);
+
+                $game = $em->getRepository('FootballBundle:Game')->verificationGame($hometeam->getTeamNameBet(), $awayteam->getTeamNameBet());
+
+                if ($game != null) {
+                    echo "pouet";
+                    $game->setHomeGoal($datamatch['result']['goalsHomeTeam']);
+                    $game->setAwayGoal($datamatch['result']['goalsAwayTeam']);
+                    $game->setEnded(true);
+                    $game->setInProgress(false);
+                    $bets = $em->getRepository('BetBundle:Bet')->findBetGame($game);
+
+                        foreach($bets as $bet) {
+                            $user = $em->getRepository('MemberBundle:User')->find($bet->getUser()->getId());
+
+                            if ($game->getHomeGoal() > $game->getAwayGoal()){
+                                if ($bet->getOdd()->getName() == 'homeTeam'){
+                                    $user->setCredit($user->getCredit() + ($bet->getAmount() * $bet->getOdd()->getOdd()));
+                                    $user->setNbBet($user->getNbBet() + 1);
+                                    $user->setNbWin($user->getNbWin() + 1);
+                                    var_dump($user->getCredit());
+                                }
+                                else {
+                                    $user->setCredit($user->getCredit() - ($bet->getAmount() * $bet->getOdd()->getOdd()));
+
+                                    $user->setNbBet($user->getNbBet() + 1);
+                                    if ($user->getNbWin() > 0){
+                                        $user->setNbWin($user->getNbWin() - 1);
+                                    }
+
+                                }
+                                $em->flush();
+                            }
+                            if ($game->getHomeGoal() == $game->getAwayGoal()){
+                                if ($bet->getOdd()->getName() == 'Draw'){
+                                    $user->setCredit($user->getCredit() + ($bet->getAmount() * $bet->getOdd()->getOdd()));
+                                    $user->setNbBet($user->getNbBet() + 1);
+                                    $user->setNbWin($user->getNbWin() + 1);
+                                    var_dump($user->getCredit());
+                                }
+                                else {
+                                    $user->setCredit($user->getCredit() - ($bet->getAmount() * $bet->getOdd()->getOdd()));
+
+                                    $user->setNbBet($user->getNbBet() + 1);
+
+                                    if ($user->getNbWin() > 0){
+                                        $user->setNbWin($user->getNbWin() - 1);
+                                    }
+                                    var_dump($user->getCredit());
+                                }
+                                $em->flush();
+                            }
+                            if ($game->getHomeGoal() < $game->getAwayGoal()){
+                                if ($bet->getOdd()->getName() == 'awayTeam'){
+                                    $user->setCredit($user->getCredit() + ($bet->getAmount() * $bet->getOdd()->getOdd()));
+                                    $user->setNbBet($user->getNbBet() + 1);
+                                    $user->setNbWin($user->getNbWin() + 1);
+
+                                }
+                                else {
+                                    $user->setCredit($user->getCredit() - ($bet->getAmount() * $bet->getOdd()->getOdd()));
+
+                                    $user->setNbBet($user->getNbBet() + 1);
+
+                                    if ($user->getNbWin() > 0){
+                                        $user->setNbWin($user->getNbWin() - 1);
+                                    }
+                                    var_dump($user->getCredit());
+                                }
+                                $em->flush();
+                            }
+                        }
+
+                }
+
+
+                
+            }
+
+        }
+        die();
+
     }
     
 }

@@ -39,15 +39,14 @@ class GameRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function verificationGame(Game $game){
+    public function verificationGame($home, $away){
         $qb = $this->createQueryBuilder('g');
-        $qb->where('g.dateMatch = :parisD')
-            ->andWhere('g.homeTeam = :pariseq1')
+        $qb->Where('g.homeTeam = :pariseq1')
+            ->andWhere('g.ended = false')
             ->andWhere('g.awayTeam = :pariseq2')
-            ->setParameter('parisD', $game->getDateMatch())
-            ->setParameter('pariseq1', $game->getHomeTeam())
-            ->setParameter('pariseq2', $game->getAwayTeam());
+            ->setParameter('pariseq1', $home )
+            ->setParameter('pariseq2', $away );
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

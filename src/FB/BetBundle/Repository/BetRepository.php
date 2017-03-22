@@ -3,6 +3,7 @@
 namespace FB\BetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use FB\FootballBundle\Entity\Game;
 use FB\MemberBundle\Entity\User;
 
 /**
@@ -18,6 +19,16 @@ class BetRepository extends EntityRepository
         $qb->where('b.user = :user')
             ->orderBy('b.id', 'DESC')
             ->setParameter('user', $user);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findBetGame(Game $game){
+        $qb = $this->createQueryBuilder('b');
+        $qb->innerJoin('b.odd','o')
+            ->where('o.game = :game')
+            ->orderBy('b.id', 'DESC')
+            ->setParameter('game', $game);
 
         return $qb->getQuery()->getResult();
     }

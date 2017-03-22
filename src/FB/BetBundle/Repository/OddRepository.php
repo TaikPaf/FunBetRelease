@@ -17,7 +17,6 @@ class OddRepository extends EntityRepository
         $qb = $this->createQueryBuilder('o');
         $qb->where('o.game = :game')
             ->setMaxResults(30)
-            ->orderBy('o.game.id', 'ASC')
             ->setParameter('game', $game);
 
         return $qb->getQuery()->getResult();
