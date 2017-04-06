@@ -3,39 +3,75 @@
 {% block body %}
     <div class="row">
         {% for flashMessage in app.session.flashbag.get('success') %}
-            <div class="alert alert-success alert-dismissible col-md-4 col-md-offset-4" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Enregistré !</strong> Votre bet a été modifié.
+            <div id="toast-container" class="toast-top-center">
+                <div class="toast toast-success" aria-live="polite" style="display: block; opacity: 1;">
+                    <button type="button" class="toast-close-button" role="button" onclick="$('#toast-container').hide();">×</button>
+                    <div class="toast-message">Enregistré ! Votre bet a été modifié.</div>
+                </div>
             </div>
-
         {% endfor %}
     </div>
 
 
     <div class="row gutter-xs">
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
 
-                    <strong>Derniers reporting</strong>
-                </div>
-                <div class="card-body" data-toggle="match-height" style="height: 262px;">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Campaign Name</th>
-                            <th>Link Clicks</th>
-                            <th>Reach</th>
-                            <th>Status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                            <strong>Derniers reporting</strong>
+                        </div>
+                        <div class="card-body" data-toggle="match-height" style="height: 262px;">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Campaign Name</th>
+                                    <th>Link Clicks</th>
+                                    <th>Reach</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+
+                            <strong>Derniers reporting</strong>
+                        </div>
+                        <div class="card-body" data-toggle="match-height" style="height: 262px;">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Campaign Name</th>
+                                    <th>Link Clicks</th>
+                                    <th>Reach</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+            </div>
+
+
         </div>
         <div class="col-md-6">
             <div class="card">
@@ -43,7 +79,7 @@
                     <span class="icon icon-calculator"></span>
                     <strong>Derniers bets</strong>
                 </div>
-                <div class="card-body" data-toggle="match-height" style="height: 262px;">
+                <div class="card-body"  style="">
                     <table class="table table-hover">
                         <thead>
                         <tr>

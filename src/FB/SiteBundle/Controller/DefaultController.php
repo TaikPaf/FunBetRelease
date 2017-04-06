@@ -4,6 +4,7 @@ namespace FB\SiteBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use FB\BetBundle\Entity\Bet;
 
 class DefaultController extends Controller
 {
@@ -12,7 +13,11 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+
         $em = $this->getDoctrine()->getManager();
+
+        $bet = new Bet();
+        $form = $this->createForm('FB\BetBundle\Form\BetType', $bet);
 
         $daystat = $em->getRepository('StatsBundle:DayStat')->findOneBy(array(
             'date' => new \DateTime(),
@@ -25,7 +30,8 @@ class DefaultController extends Controller
 
 
         return $this->render('default/index.html.twig', array(
-            'games' => $games
+            'games' => $games,
+            'form' => $form->createView()
         ));
     }
 }

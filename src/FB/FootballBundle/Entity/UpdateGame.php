@@ -128,11 +128,13 @@ class UpdateGame
                     if ($bet['code'] == 'Ftb_Mr3') {
                         //echo $bet['code'];
                         foreach ($bet->choice as $choice) {
+                            //var_dump($choice);die();
                             if ($choice['name'] == '%1%') {
                                 $HomeTeamOdd->setOdd((float)$choice['odd'][0]);
                                 $HomeTeamOdd->setGame($CurrentGame);
                                 $HomeTeamOdd->setName('homeTeam');
                                 $CurrentGame->addOdds($HomeTeamOdd);
+                               // var_dump($HomeTeamOdd);die();
                             }
                             if ($choice['name'] == 'Nul') {
                                 $DrawOdd->setOdd((float)$choice['odd'][0]);
@@ -148,16 +150,22 @@ class UpdateGame
                             }
                         }
 
+
                     }
                 }
                 //var_dump($CurrentGame);
                 //var_dump($em->getRepository('FootballBundle:Game')->verificationGame($CurrentGame));die();
-                if ($em->getRepository('FootballBundle:Game')->verificationGame($CurrentGame) == null){
+                if ($em->getRepository('FootballBundle:Game')->verificationGame($CurrentGame->getHomeTeam(), $CurrentGame->getAwayTeam()) == null){
+
+
+                    //changer ordre
 
                     $em->persist($CurrentGame);
-                    $em->persist($AwayTeamOdd);
+
                     $em->persist($HomeTeamOdd);
                     $em->persist($DrawOdd);
+                    $em->persist($AwayTeamOdd);
+                    
                     $em->flush();
 
                 }

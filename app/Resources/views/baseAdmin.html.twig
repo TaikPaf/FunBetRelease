@@ -56,23 +56,7 @@
                 <span class="bar-line bar-line-6 in"></span>
               </span>
                 </button>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if app.user != null %}
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg">
-                                <div class="dropdown-body">
-                                    </div>
-                                <div class="dropdown-footer">
-                                    <a class="dropdown-btn" href="#">See All</a>
-                                </div>
-                            </div>
-                        </li>
-                    {% endif %}
-                    <li><a href="#">Link</a></li>
-                    <li><a href="#">Link</a></li>
-                </ul>
+
             </nav>
         </div>
     </div>
@@ -87,7 +71,25 @@
                     <li class="sidenav-item">
                         <a href="/">
                             <span class="sidenav-icon icon icon-th"></span>
-                            <span class="sidenav-label">Basic template</span>
+                            <span class="sidenav-label">Accueil</span>
+                        </a>
+                    </li>
+                    <li class="sidenav-item">
+                        <a href="page-layouts.html">
+                            <span class="sidenav-icon icon icon-columns"></span>
+                            <span class="sidenav-label">Mes paris</span>
+                        </a>
+                    </li>
+                    <li class="sidenav-item">
+                        <a href="page-layouts.html">
+                            <span class="sidenav-icon icon icon-columns"></span>
+                            <span class="sidenav-label">Contacter le support</span>
+                        </a>
+                    </li>
+                    <li class="sidenav-item">
+                        <a href="page-layouts.html">
+                            <span class="sidenav-icon icon icon-columns"></span>
+                            <span class="sidenav-label">Page layouts</span>
                         </a>
                     </li>
                 </ul>
@@ -95,6 +97,7 @@
         </div>
     </div>
     <div class="layout-content">
+
         <div class="layout-content-body">
             <div class="title-bar">
                 {% block body %}{% endblock %}
@@ -107,9 +110,76 @@
         </div>
     </div>
 </div>
+<div id="infoModalColoredHeader" tabindex="-1" role="dialog" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Enregistrer votre paris</h4>
+            </div>
+            <div class="content-modal">
+                <form class="form" id="fb_betbundle" method="post" style="min-height: 60px;">
+                    <div class="form-group">
+                        <label for="mise">Votre mise</label>
+                        <input type="text" id="miseUser" name="mise" />
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-primary btn-block col-xs-2" type="submit" id="envoyer" value="Envoyer" />
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+        </div>
+    </div>
+</div>
 <script src="{{ asset('js/vendor.min.js') }}"></script>
 <script src="{{ asset('js/elephant.min.js') }}"></script>
 <script src="{{ asset('js/application.min.js') }}"></script>
+<script>
+    var oddid = '';
+    $('.odd').on('click', function(){
+        oddid = $(this).data('id');
+    });
+    loader = "<div id='loader' class='spinner spinner-primary spinner-lg' style='position:relative;min-height:60px;display: none;'></div>";
+    $('.content-modal').append(loader);
+
+
+        $('#fb_betbundle').on('submit', function(e) {
+            e.preventDefault();
+
+            var $this = $(this);
+                $.ajax({
+                    url: window.location+'bet/new/'+oddid,
+                    type: $this.attr('method'),
+                    data:  "&mise="+$this.find('#miseUser').val(),
+                    beforeSend: function() {
+                        $('#fb_betbundle').hide();
+                        $('#loader').show();
+                    },
+                    complete: function(){
+                        $('#fb_betbundle').show();
+                        $('#loader').hide();
+                    },
+                    success: function() {
+                        $('#infoModalColoredHeader').modal('hide');
+
+                    },
+                    error: function(){
+                        alert('Credit insuffisant');
+                    }
+
+                });
+
+        });
+
+</script>
+
 
 </body>
 </html>

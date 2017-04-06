@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Bet controller.
@@ -45,49 +47,64 @@ class BetController extends Controller
     public function newBetAction(Request $request, Odd $odd)
     {
         $bet = new Bet();
-        $form = $this->createForm('FB\BetBundle\Form\BetType', $bet);
-        $form->handleRequest($request);
+        //$form = $this->createForm('FB\BetBundle\Form\BetType', $bet);
+        //$form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() && $this->getUser()->getCredit() >= $bet->getAmount()) {
-            $em = $this->getDoctrine()->getManager();
-           
-            $bet->setAmount(abs($bet->getAmount()));
-            
-            $daystat = $em->getRepository('StatsBundle:DayStat')->FindOneBy(array('date' => new \DateTime()));
-            if ($daystat == null){
-                $daystat = new DayStat();
-                $daystat->setDate(new \DateTime());
-                $daystat->setNbUser(0);
+        //if ($form->isSubmitted() && $form->isValid() && $this->getUser()->getCredit() >= $bet->getAmount()) {
+            if($request->isXmlHttpRequest()) {
+                $em = $this->getDoctrine()->getManager();
+                $user = $em->getRepository('MemberBundle:User')->find($this->getUser());
+
+                if ($request->request->get('mise') < $user->getCredit()){
+
+                    //$bet->setAmount(abs($bet->getAmount()));
+                    $val = $request->request->get('mise');
+
+                    $bet->setAmount(abs($val));
+
+                    $daystat = $em->getRepository('StatsBundle:DayStat')->FindOneBy(array('date' => new \DateTime()));
+                    if ($daystat == null) {
+                        $daystat = new DayStat();
+                        $daystat->setDate(new \DateTime());
+                        $daystat->setNbUser(0);
+                    }
+
+
+                    //Remplissage de Bet
+                    $bet->setUser($user);
+                    $bet->setDate(new \DateTime());
+                    $bet->setOdd($odd);
+                    $bet->setPotentialWin($bet->getAmount() * $odd->getOdd());
+                    $bet->setIsWin(false);
+
+                    //Ajout des stats en BDD
+                    $daystat->setNbBet($daystat->getNbBet() + 1);
+                    $daystat->setNbAmountBet($daystat->getNbAmountBet() + $bet->getAmount());
+
+
+                    //Mise à jour du crédit joueur
+                    $user->setCredit($user->getCredit() - $bet->getAmount());
+
+                   $em->persist($bet);
+                   $em->persist($daystat);
+                    $em->flush();
+
+                    $response = new Response();
+                    $response->setStatusCode(Response::HTTP_OK);
+                    return $response;
+                }
+                $response = new Response();
+                $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+                return $response;
             }
 
-            $user = $em->getRepository('MemberBundle:User')->find($this->getUser());
-            //Remplissage de Bet
-            $bet->setUser($user);
-            $bet->setDate(new \DateTime());
-            $bet->setOdd($odd);
-            $bet->setPotentialWin($bet->getAmount() * $odd->getOdd());
-            $bet->setIsWin(false);
-
-            //Ajout des stats en BDD
-            $daystat->setNbBet($daystat->getNbBet() + 1);
-            $daystat->setNbAmountBet($daystat->getNbAmountBet() + 1);
-            
-
-            //Mise à jour du crédit joueur
-            $user->setCredit($user->getCredit() - $bet->getAmount());
-
-            $em->persist($bet);
-            $em->persist($daystat);
-            $em->flush();
-
-            return $this->redirectToRoute('bet_show', array('id' => $bet->getId()));
         }
 
-        return $this->render('bet/new.html.twig', array(
+        /*return $this->render('bet/new.html.twig', array(
             'bet' => $bet,
             'form' => $form->createView(),
-        ));
-    }
+        ));*/
+    //}
 
     /**
      * Validation matchs - En cours
@@ -125,7 +142,7 @@ class BetController extends Controller
                                     $user->setCredit($user->getCredit() + ($bet->getAmount() * $bet->getOdd()->getOdd()));
                                     $user->setNbBet($user->getNbBet() + 1);
                                     $user->setNbWin($user->getNbWin() + 1);
-                                    var_dump($user->getCredit());
+                                    //var_dump($user->getCredit());
                                 }
                                 else {
                                     $user->setCredit($user->getCredit() - ($bet->getAmount() * $bet->getOdd()->getOdd()));
@@ -143,7 +160,7 @@ class BetController extends Controller
                                     $user->setCredit($user->getCredit() + ($bet->getAmount() * $bet->getOdd()->getOdd()));
                                     $user->setNbBet($user->getNbBet() + 1);
                                     $user->setNbWin($user->getNbWin() + 1);
-                                    var_dump($user->getCredit());
+                                   // var_dump($user->getCredit());
                                 }
                                 else {
                                     $user->setCredit($user->getCredit() - ($bet->getAmount() * $bet->getOdd()->getOdd()));
@@ -153,7 +170,7 @@ class BetController extends Controller
                                     if ($user->getNbWin() > 0){
                                         $user->setNbWin($user->getNbWin() - 1);
                                     }
-                                    var_dump($user->getCredit());
+                                   // var_dump($user->getCredit());
                                 }
                                 $em->flush();
                             }
@@ -172,7 +189,7 @@ class BetController extends Controller
                                     if ($user->getNbWin() > 0){
                                         $user->setNbWin($user->getNbWin() - 1);
                                     }
-                                    var_dump($user->getCredit());
+                                   // var_dump($user->getCredit());
                                 }
                                 $em->flush();
                             }
