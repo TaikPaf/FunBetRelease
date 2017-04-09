@@ -1,3 +1,7 @@
+support_ticket_reply:
+    resource: "@SupportBundle/Controller/TicketReplyController.php"
+    type:     annotation
+
 site:
     resource: "@SiteBundle/Controller/"
     type:     annotation

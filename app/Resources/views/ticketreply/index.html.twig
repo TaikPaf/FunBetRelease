@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Ticketreplies list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Message</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ticketReply in ticketReplies %}
+            <tr>
+                <td><a href="{{ path('reply_show', { 'id': ticketReply.id }) }}">{{ ticketReply.id }}</a></td>
+                <td>{% if ticketReply.date %}{{ ticketReply.date|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ ticketReply.message }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('reply_show', { 'id': ticketReply.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('reply_edit', { 'id': ticketReply.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('reply_new') }}">Create a new ticketReply</a>
+        </li>
+    </ul>
+{% endblock %}

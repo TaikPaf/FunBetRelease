@@ -1,0 +1,78 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN TICKET LIST CONTENT -->
+            <div class="app-ticket app-ticket-list">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet light ">
+                            <div class="portlet-title tabbable-line">
+                                <div class="caption caption-md">
+                                    <i class="icon-globe theme-font hide"></i>
+                                    <span class="caption-subject font-blue-madison bold uppercase">Vos tickets</span>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="table-toolbar">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="btn-group">
+                                                <a href="{{ path('support_new') }}"><button id="sample_editable_1_new" class="btn sbold green"> Nouveau
+                                                    <i class="fa fa-plus"></i>
+                                                </button></a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div id="sample_1_wrapper" class="dataTables_wrapper no-footer">
+                                    <div class="portlet box red">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-picture"></i></div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <div class="table-scrollable">
+                                                <table class="table table-condensed table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th> N° </th>
+                                                        <th>Date</th>
+                                                        <th> Message </th>
+                                                        <th> Statut </th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for ticket in tickets %}
+                                                    <tr>
+                                                        <td> {{ ticket.id }} </td>
+                                                        <td>{{ ticket.date|date('d/m/y') }}</td>
+                                                        <td> {{ ticket.message }} </td>
+
+                                                        <td>
+                                                            {% if ticket.status == 'Fermé' %}
+                                                                <span class="label label-sm label-danger"> {{ ticket.status }} </span>
+                                                            {% else %}
+                                                            <span class="label label-sm label-info"> {{ ticket.status }} </span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td><a href="{{ path('support_show', {'id' : ticket.id}) }}"><button type="button" class="btn btn-primary">Voir</button></a></td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END PROFILE CONTENT -->
+        </div>
+    </div>
+{% endblock %}

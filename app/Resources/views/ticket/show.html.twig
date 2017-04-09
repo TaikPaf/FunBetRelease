@@ -1,0 +1,77 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block body %}
+    <div class="col-md-12">
+        <!-- BEGIN PROFILE SIDEBAR -->
+        <!-- END BEGIN PROFILE SIDEBAR -->
+        <!-- BEGIN TICKET DETAILS CONTENT -->
+        <div class="app-ticket app-ticket-details">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light ">
+                        <div class="portlet-title tabbable-line">
+                            <div class="caption caption-md">
+                                <i class="icon-globe theme-font hide"></i>
+                                <span class="caption-subject font-blue-madison bold uppercase">Détail du ticket</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="ticket-cust">
+                                        <span class="bold">Membre:</span> {{ ticket.user.username }}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="ticket-date">
+                                        <span class="bold">Date:</span> {{ ticket.date|date('d/m/y') }} </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="ticket-msg">
+                                        <h3>
+                                            <i class="icon-note"></i>Message</h3>
+                                        {{ ticket.message }}
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="ticket-line"></div>
+                            {% if app.user.rank =='Admin' %}
+                                <div class="row">
+                                    <a href="{{ path('reply_new', {'id' : ticket.id}) }}"><button type="button" class="btn btn-primary">Répondre</button></a>
+                                    <a href="{{ path('support_close', {'id' : ticket.id}) }}"><button type="button" class="btn btn-warning">Clore le sujet</button></a>
+                                </div>
+
+                            {% endif %}
+
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h3>
+                                            <i class="icon-action-redo"></i> Réponse(s) :</h3>
+                                        {% for reply in ticket.ticketReply %}
+
+                                                <div class="alert alert-warning">
+                                                    <div class="ticket-msg">
+                                                        <h3>
+                                                            <i class="icon-note"></i>Message</h3>
+                                                        {{ reply.date|date('d-m-y')  }} - {{ reply.message }}
+                                                    </div>
+                                                </div>
+
+
+                                        {% endfor %}
+                                        <p></p>
+                                    </div>
+                                </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PROFILE CONTENT -->
+    </div>
+{% endblock %}

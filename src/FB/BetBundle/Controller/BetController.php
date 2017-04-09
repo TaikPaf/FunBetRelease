@@ -84,6 +84,7 @@ class BetController extends Controller
 
                     //Mise à jour du crédit joueur
                     $user->setCredit($user->getCredit() - $bet->getAmount());
+                    $user->setNbBet($user->getNbBet() + 1);
 
                    $em->persist($bet);
                    $em->persist($daystat);
