@@ -24,11 +24,12 @@ class AdminBetController extends Controller
 
         $bets = $em->getRepository('BetBundle:Bet')->findBy(array(),array('id' => 'DESC'),20);
         $winnersJackpot = $em->getRepository('StatsBundle:Jackpot')->getLastWinner();
-        
+        $supportMsg = $em->getRepository('SupportBundle:Ticket')->findBy(array(),array('id' => 'DESC'),10);
 
         return $this->render('admin/index.html.twig',array(
             'bets' => $bets,
-            'winners' => $winnersJackpot
+            'winners' => $winnersJackpot,
+            'supportMsg' => $supportMsg
         ));
     }
 

@@ -54,21 +54,33 @@
                         <div class="portlet-title">
 
                             <div class="caption">
-                                <i class="fa fa-gift"></i>Derniers bet </div>
+                                <i class="fa fa-gift"></i>Derniers Tickets </div>
                         </div>
                         <div class="portlet-body">
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Campaign Name</th>
-                                    <th>Link Clicks</th>
-                                    <th>Reach</th>
+                                    <th>N°</th>
+                                    <th>Pseudo</th>
+                                    <th>Message</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% for support in supportMsg %}
+                                    <tr>
+                                        <td>{{ support.id }}</td>
+                                        <td>{{ support.user.username }}</td>
+                                        <td>{{ support.message }}</td>
+                                       {% if support.status == 'Fermé' %}
+                                           <td> <span class="label label-sm label-danger">{{ support.status }}</span></td>
+                                           {% else %}
+                                               <td><span class="label label-sm label-warning">{{ support.status }}</span></td>
+                                               {% endif %}
+                                        <td><a href="{{ path('reply_new', {'id' : support.id}) }}"><button class="btn btn-info">Répondre</button></a></td>
+                                    </tr>
+                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>
