@@ -6,74 +6,45 @@ use FB\FootballBundle\Entity\UpdateGame;
 use FB\BetBundle\Entity\Bet;
 use FB\BetBundle\Entity\Odd;
 use FB\FootballBundle\Entity\Game;
+use FB\MemberBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-class AdminBetController extends Controller
+class SearchController extends Controller
 {
+    
 
-    /**
-     * @Route("/", name="admin_index")
-     * @Method("GET")
-     */
-    public function indexAction(){
-
-        $em = $this->getDoctrine()->getManager();
-
-        $bets = $em->getRepository('BetBundle:Bet')->findBy(array(),array('id' => 'DESC'),20);
-        $winnersJackpot = $em->getRepository('StatsBundle:Jackpot')->getLastWinner();
-        
-
-        return $this->render('admin/index.html.twig',array(
-            'bets' => $bets,
-            'winners' => $winnersJackpot
-        ));
-    }
-
-
-    /**
-     * @Route("/updategame", name="admin_update_game")
-     */
-    public function updateAction()
-    {
-        $Update = new UpdateGame();
-        $UpdateAnglais = new UpdateGame();
-        $UpdateLiga = new UpdateGame();
-        $Update->setDateUpdate(new \DateTime());
-        $UpdateAnglais->setDateUpdate(new \DateTime());
-        $UpdateLiga->setDateUpdate(new \DateTime());
-
-        //Liste des sports/ligues à update
-        $Update->UpdateFootballLeague(2, 'Ligue 1', 'Ligue 1 2016/17', $this->getDoctrine()->getManager());
-        $UpdateAnglais->UpdateFootballLeague(1, 'Angl. Premier League', 'Premier League 2016/17', $this->getDoctrine()->getManager());
-        $UpdateLiga->UpdateFootballLeague(5, 'Espagne Liga Primera', 'Liga Primera 16/17', $this->getDoctrine()->getManager());
-
-        $Update->setSuccessfull(true);
-        $UpdateAnglais->setSuccessfull(true);
-        $UpdateLiga->setSuccessfull(true);
-
-
-
-        $this->getDoctrine()->getManager()->persist($Update);
-        $this->getDoctrine()->getManager()->persist($UpdateAnglais);
-        $this->getDoctrine()->getManager()->persist($UpdateLiga);
-        $this->getDoctrine()->getManager()->flush();
-
-        return $this->render('AdminBundle:Default:index.html.twig');
-    }
 
     /**
      * Finds and displays a bet entity.
      *
-     * @Route("/bet/{id}", name="admin_bet_show")
-     * @Method("GET")
+     * @Route("/search/user", name="admin_search_user")
+     * @Method({"GET", "POST"})
      */
-    public function showBetAction(Bet $bet)
+    public function searchUserAction(Request $request)
     {
-        return $this->render('bet/show.html.twig', array(
-            'bet' => $bet,
+        $user = new User();
+        $editForm = $this->createForm('FB\MemberBundle\Form\UserType',$user);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+
+
+            $em = $this->getDoctrine()->getManager();
+            $searchUser = $em->getRepository('MemberBundle:User')->findOneBy(array('username'=>$user->getUsername()));
+            $bets = $em->getRepository('BetBundle:Bet')->findBy(array('user' => $searchUser),array('id'=>'DESC'),20);
+            
+
+            return $this->render('admin/UserShow.html.twig', array(
+                'user' => $searchUser,
+                'bets' => $bets
+            ));
+        }
+        return $this->render('admin/searchUser.html.twig', array(
+            'user' => $user,
+            'edit_form' => $editForm->createView(),
         ));
     }
 
@@ -87,7 +58,7 @@ class AdminBetController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $bets = $em->getRepository('BetBundle:Bet')->findBy(array(),array('id' => 'DESC'),20);
-        
+
         return $this->render('admin/showBet.html.twig', array(
             'bets' => $bets,
         ));
@@ -137,7 +108,7 @@ class AdminBetController extends Controller
         if ($user->getNbBet() > 0){
             $user->setNbBet($user->getNbBet() - 1);
         }
-        
+
         $em->remove($bet);
         $em->flush();
 

@@ -12,6 +12,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('StatsBundle:Default:index.html.twig');
+        return $this->redirectToRoute('fb_site_default_index');
     }
 }

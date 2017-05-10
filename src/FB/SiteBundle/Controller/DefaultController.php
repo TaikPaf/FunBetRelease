@@ -19,19 +19,39 @@ class DefaultController extends Controller
         $bet = new Bet();
         $form = $this->createForm('FB\BetBundle\Form\BetType', $bet);
 
-        $daystat = $em->getRepository('StatsBundle:DayStat')->findOneBy(array(
-            'date' => new \DateTime(),
-        ));
+        $nbUser = $em->getRepository('StatsBundle:DayStat')->findNbUser();
+        $nbBet = $em->getRepository('StatsBundle:DayStat')->findNbBet();
+        $AmountBet = $em->getRepository('StatsBundle:DayStat')->findNbAmount();
+        
 
+        $gamesLigue1 = $em->getRepository('FootballBundle:Game')->findNextGames('Ligue 1');
+        $gamesAnglais = $em->getRepository('FootballBundle:Game')->findNextGames('Angl. Premier League');
+        $gamesLiga = $em->getRepository('FootballBundle:Game')->findNextGames('Espagne Liga Primera');
 
-        $games = $em->getRepository('FootballBundle:Game')->findNextGames();
-
-       
+        $users = $em->getRepository('MemberBundle:User')->findBy(array(), array('credit' => 'DESC'));
 
 
         return $this->render('default/index.html.twig', array(
-            'games' => $games,
+            'gamesLigue1' => $gamesLigue1,
+            'gamesLiga' => $gamesLiga,
+            'gamesAnglais' => $gamesAnglais,
+            'users' => $users,
+            'nbUser' => $nbUser,
+            'nbBet' => $nbBet,
+            'AmountBet' => $AmountBet,
             'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/pricing")
+     */
+    public function pricingAction()
+    {
+
+
+        return $this->render('default/pricing.html.twig', array(
+
         ));
     }
 }

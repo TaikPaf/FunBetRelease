@@ -1,26 +1,38 @@
 {% extends 'baseAdmin.html.twig' %}
 
 {% block body %}
-    <h1>Bets list</h1>
+    <h1>Vos derniers paris</h1>
 
     <table class="table table-hover table-bordered">
         <thead>
             <tr>
-                <th>Amount</th>
-                <th>Potentialwin</th>
-                <th>Iswin</th>
+                <th>Mise</th>
+                <th>Gain potentiel</th>
+                <th>Gagné ?</th>
                 <th>Date</th>
-                <th colspan="2">Actions</th>
+                <th> Mise sur : </th>
+                <th >Match</th>
 
             </tr>
         </thead>
         <tbody>
         {% for bet in bets %}
-            <tr>
-                <td>{{ bet.amount }}</td>
-                <td>{{ bet.potentialWin }}</td>
-                <td>{% if bet.isWin %}Yes{% else %}No{% endif %}</td>
+            {% if bet.isWin %}
+            <tr class="success">
+                {% else %}
+                    <tr class="danger">
+                {% endif %}
+                <td>{{ bet.amount }} €</td>
+                <td>{{ bet.potentialWin }} €</td>
+                <td>{% if bet.isWin %}Oui{% else %}Non{% endif %}</td>
                 <td>{% if bet.date %}{{ bet.date|date('Y-m-d') }}{% endif %}</td>
+                {% if bet.odd.name == 'homeTeam' %}
+                    <td>{{ bet.odd.game.homeTeam }}</td>
+                {% elseif bet.odd.name == 'Draw' %}
+                    <td>Match nul</td>
+                {% else %}
+                    <td>{{ bet.odd.game.awayTeam }}</td>
+                {% endif %}
                 <td>{{ bet.odd.game.homeTeam }} -
                 {{ bet.odd.game.awayTeam }}</td>
             </tr>

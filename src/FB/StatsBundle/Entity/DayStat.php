@@ -151,4 +151,6 @@ class DayStat
     {
         return $this->nbAmountBet;
     }
+
+    
 }

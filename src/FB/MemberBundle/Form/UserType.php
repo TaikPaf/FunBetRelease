@@ -1,33 +1,30 @@
 <?php
 
-namespace FB\SupportBundle\Form;
+namespace FB\MemberBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TicketType extends AbstractType
+class UserType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('message', TextareaType::class, array('attr'=> array(
-            'class'=>'form-control autosizeme',
-            'style' => 'height:200px;'
+        $builder->add('username')
 
-        )));
+        ;
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'FB\SupportBundle\Entity\Ticket'
+            'data_class' => 'FB\MemberBundle\Entity\User'
         ));
     }
 
@@ -36,7 +33,7 @@ class TicketType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'fb_supportbundle_ticket';
+        return 'fb_betbundle_bet';
     }
 
 

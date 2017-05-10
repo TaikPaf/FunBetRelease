@@ -1,7 +1,8 @@
 {% extends 'baseAdmin.html.twig' %}
 
 {% block body %}
-    <div class="row">
+
+    <div class="">
         {% for flashMessage in app.session.flashbag.get('success') %}
             <div id="toast-container" class="toast-top-center">
                 <div class="toast toast-success" aria-live="polite" style="display: block; opacity: 1;">
@@ -17,38 +18,45 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
+                    <div class="portlet box red-sunglo">
+                        <div class="portlet-title">
 
-                            <strong>Derniers reporting</strong>
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>Derniers Jackpots </div>
                         </div>
-                        <div class="card-body" data-toggle="match-height" style="height: 262px;">
+                        <div class="portlet-body">
                             <table class="table">
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Campaign Name</th>
-                                    <th>Link Clicks</th>
-                                    <th>Reach</th>
-                                    <th>Status</th>
+                                    <th>Pseudo</th>
+                                    <th>Value</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% for winner in winners %}
+                                    <tr>
+                                        <td>{{ winner.id }}</td>
+                                        <td>{% if winner.winner != null %}{{ winner.winner.username }}{% else %} Pas de gagnant pour l'instant{% endif %}</td>
+                                        <td>{{ winner.value }}</td>
+                                    </tr>
+                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
+                    <div class="portlet box red-sunglo">
+                        <div class="portlet-title">
 
-                            <strong>Derniers reporting</strong>
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>Derniers bet </div>
                         </div>
-                        <div class="card-body" data-toggle="match-height" style="height: 262px;">
+                        <div class="portlet-body">
                             <table class="table">
                                 <thead>
                                 <tr>
@@ -74,13 +82,13 @@
 
         </div>
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <span class="icon icon-calculator"></span>
-                    <strong>Derniers bets</strong>
+            <div class="portlet box red-sunglo">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-gift"></i>Derniers bet </div>
                 </div>
-                <div class="card-body"  style="">
-                    <table class="table table-hover">
+                <div class="portlet-body"  style="">
+                    <table class="table table-bordered">
                         <thead>
                         <tr>
                             <th class="text-center">Numero</th>

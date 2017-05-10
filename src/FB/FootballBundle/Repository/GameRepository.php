@@ -13,7 +13,19 @@ use FB\FootballBundle\Entity\Game;
  */
 class GameRepository extends EntityRepository
 {
-    public function findNextGames(){
+    public function findNextGames($ligue){
+        $qb = $this->createQueryBuilder('g');
+        $qb->where('g.dateMatch >= :date')
+            ->andWhere('g.typeGame = :ligue')
+            ->setParameter('ligue', $ligue)
+            ->setParameter('date', new \Datetime())
+            ->setMaxResults(10)
+            ->orderBy('g.dateMatch', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findAllNextGames(){
         $qb = $this->createQueryBuilder('g');
         $qb->where('g.dateMatch >= :date')
             ->setParameter('date', new \Datetime())

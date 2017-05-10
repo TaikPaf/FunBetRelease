@@ -1,0 +1,93 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-1">
+            <div class="profile-sidebar">
+                <!-- PORTLET MAIN -->
+                <div class="portlet light profile-sidebar-portlet ">
+                    <!-- SIDEBAR USERPIC -->
+                    <div class="profile-userpic">
+                        <img src="https://www.timeshighereducation.com/sites/default/files/byline_photos/default-avatar.png" class="img-responsive" alt=""> </div>
+                    <!-- END SIDEBAR USERPIC -->
+                    <!-- SIDEBAR USER TITLE -->
+                    <div class="profile-usertitle">
+                        <div class="profile-usertitle-name">{{ user.username }}</div>
+                        <div class="profile-usertitle-job"> {{ user.rank }} </div>
+                    </div>
+                    <!-- END SIDEBAR USER TITLE -->
+
+
+                    <!-- END SIDEBAR BUTTONS -->
+                    <!-- SIDEBAR MENU -->
+
+                    <!-- END MENU -->
+                </div>
+                <!-- END PORTLET MAIN -->
+                <!-- PORTLET MAIN -->
+                <div class="portlet light ">
+                    <!-- STAT -->
+                    <div class="row list-separated profile-stat">
+                        <div class="col-md-4 col-sm-4 col-xs-6">
+                            <div class="uppercase profile-stat-title"> {{ user.nbBet }} </div>
+                            <div class="uppercase profile-stat-text"> Paris enregistrés </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-6">
+                            <div class="uppercase profile-stat-title"> {{ user.nbWin }} </div>
+                            <div class="uppercase profile-stat-text"> Paris gagnés </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-6">
+                            <div class="uppercase profile-stat-title"> {{ ((user.nbWin/user.nbBet)*100)|number_format(2,'.',' ') }} </div>
+                            <div class="uppercase profile-stat-text"> % win </div>
+                        </div>
+                    </div>
+                    <!-- END STAT -->
+                </div>
+                <!-- END PORTLET MAIN -->
+            </div>
+        </div>
+        <div class="col-md-6">
+
+                <!-- BEGIN CONDENSED TABLE PORTLET-->
+                <div class="portlet box red">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-picture"></i>20 derniers bets</div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="table-scrollable">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">Numero</th>
+                                    <th class="text-center">Montant</th>
+                                    <th class="text-center">Home</th>
+                                    <th class="text-center">Away</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for bet in bets %}
+                                <tr>
+                                    <td>{{ bet.id }}</td>
+                                    <td>{{ bet.amount }} €</td>
+                                    <td>{{ bet.odd.game.homeTeam }}</td>
+                                    <td>{{ bet.odd.game.awayTeam }}</td>
+                                    <td>
+                                        <a href="{{ path('admin_bet_cancel', {'id':bet.id}) }}" class="btn btn-danger btn-mini">Annuler</a>
+                                        <a href="{{ path('admin_bet_edit', {'id':bet.id}) }}" class="btn btn-warning btn-mini">Editer</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- END CONDENSED TABLE PORTLET-->
+            </div>
+
+    </div>
+
+{% endblock %}

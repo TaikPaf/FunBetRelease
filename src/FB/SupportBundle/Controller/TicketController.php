@@ -93,72 +93,13 @@ class TicketController extends Controller
      */
     public function showAction(Ticket $ticket)
     {
-        $deleteForm = $this->createDeleteForm($ticket);
 
         return $this->render('ticket/show.html.twig', array(
             'ticket' => $ticket,
-            'delete_form' => $deleteForm->createView(),
+            
         ));
     }
 
-    /**
-     * Displays a form to edit an existing ticket entity.
-     *
-     * @Route("/{id}/edit", name="support_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, Ticket $ticket)
-    {
-        $deleteForm = $this->createDeleteForm($ticket);
-        $editForm = $this->createForm('FB\SupportBundle\Form\TicketType', $ticket);
-        $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('support_edit', array('id' => $ticket->getId()));
-        }
-
-        return $this->render('ticket/edit.html.twig', array(
-            'ticket' => $ticket,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-     * Deletes a ticket entity.
-     *
-     * @Route("/{id}", name="support_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Ticket $ticket)
-    {
-        $form = $this->createDeleteForm($ticket);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($ticket);
-            $em->flush($ticket);
-        }
-
-        return $this->redirectToRoute('support_index');
-    }
-
-    /**
-     * Creates a form to delete a ticket entity.
-     *
-     * @param Ticket $ticket The ticket entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Ticket $ticket)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('support_delete', array('id' => $ticket->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }
